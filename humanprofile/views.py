@@ -15,7 +15,7 @@ class ProfileChange(APIView):
     def get(self,request,format=None):
         #print("hello")
         token = request.META.get('HTTP_AUTHORIZATION')
-        #print(token)
+        print(token)
         user = checktoken(token=token)
         if user == None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
