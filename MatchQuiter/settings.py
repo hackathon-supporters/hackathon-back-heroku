@@ -56,8 +56,9 @@ INSTALLED_APPS = [
     'django_bootstrap5',
     'rest_framework',
     'corsheaders',
-    'matchquiter.apps.MatchquiterConfig',
     'users',
+    'matchquiter.apps.MatchquiterConfig',
+    
 ]
 AUTH_USER_MODEL = 'users.User'
 
