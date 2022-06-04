@@ -1,1 +1,1 @@
-web: gunicorn MatchQuiter.wsgi --log-file-
+web: gunicorn MatchQuiter.wsgi --log-file -
