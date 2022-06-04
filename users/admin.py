@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext, gettext_lazy as _
-from .models import User
+from .models import User,Token
 # Register your models here.
 
 @admin.register(User)
@@ -15,3 +15,5 @@ class UserAdmin(UserAdmin):
     )
 
     list_display = ('username','email','is_active',)
+
+admin.site.register(Token)

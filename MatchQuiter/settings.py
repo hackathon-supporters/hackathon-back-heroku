@@ -101,8 +101,12 @@ WSGI_APPLICATION = 'MatchQuiter.wsgi.application'
 if DEBUG:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'matchquiterdb',
+            'USER':secret.DB_USER,
+            'PASSWORD':secret.DB_PASS,
+            'HOST':'localhost',
+            'PORT':'3306',
         }
     }
     
@@ -112,6 +116,7 @@ else:
     DATABASES={
         'default':dj_database_url.config()
     }
+    DATABASES['default']['ATOMIC_REQUESTS'] = True #外すかも
 
 
 # Password validation
@@ -160,3 +165,19 @@ STATICFILES_DIRS = (
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 django_heroku.settings(locals())
+
+""" JWT_AUTH = {
+    'JWT_VERIFY_EXPIRATION':False,
+    'JWT_AUTH_HEADER_PREFIX': 'JWT',
+} """
+
+""" REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES' : (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ),
+    'NON_FIELD_ERRORS_KEY': 'detail',
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
+} """

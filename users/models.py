@@ -1,10 +1,9 @@
-from ast import Try
-from operator import is_not
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
 from django.core.mail import send_mail
 import uuid as uuid_lib
+from MatchQuiter import settings
 
 class UserManager(UserManager):
     def _create_user(self,email,password,**extra_fields):
@@ -73,3 +72,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     def get_short_name(self):
         return self.username
+
+class Token(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,verbose_name="user",on_delete=models.CASCADE)
+    token = models.CharField(max_length=512,unique=True)
