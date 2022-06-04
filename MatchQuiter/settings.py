@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import django_heroku
-from . import secret #今だけ
+#from . import secret #今だけ
 import os
 from socket import gethostname
 
