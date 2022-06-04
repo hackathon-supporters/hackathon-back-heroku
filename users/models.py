@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
 from django.core.mail import send_mail
 import uuid as uuid_lib
-from MatchQuiter import settings
+from django.conf import settings
 
 class UserManager(UserManager):
     def _create_user(self,email,password,**extra_fields):

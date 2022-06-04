@@ -23,7 +23,7 @@ def maketoken(email:str,password:str,user:User):
     
     while(True):
         seed = seed+100
-        summarystring = str(email+SECRET_KEY+password) +str(seed)
+        summarystring = str(email+secret_key+password) +str(seed)
         print(summarystring)
         print(type(summarystring))
         hash512string = hashlib.sha512(summarystring.encode('utf-8')).hexdigest()
@@ -32,3 +32,13 @@ def maketoken(email:str,password:str,user:User):
     
     token = Token.objects.create(user=user,token = hash512string)
     return token.token
+
+def checktoken(token):
+    """
+    return user or None
+    """
+    try:
+        user = Token.objects.get(token=token).user
+    except Token.DoesNotExist:
+        return None
+    return user

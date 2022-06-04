@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('matchquiter.urls')),
     path('api/v1/auth/',include('users.urls')),
-    #path('api/v1/profile/',include('profile.urls')),
+    path('api/v1/profile/',include('humanprofile.urls')),
     #path('api/v1/resources/',include('resources.urls')),
     #path('api/v1/chat',include('chat.urls')),
 ]

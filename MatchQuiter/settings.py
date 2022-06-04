@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'users',
     'matchquiter.apps.MatchquiterConfig',
-    
+    'humanprofile.apps.HumanprofileConfig',
 ]
 AUTH_USER_MODEL = 'users.User'
 

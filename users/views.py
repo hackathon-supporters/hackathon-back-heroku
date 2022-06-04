@@ -30,6 +30,10 @@ class UserLogin(APIView):
     def post(self,request,format=None):
         email = request.data["email"]
         password = request.data["password"]
+        if email == None and \
+            password == None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
         eab = EmailAuthBackend()
         userobj = EmailAuthBackend.authenticate(eab,request=request,email=email,password=password)
         if userobj == None:
@@ -37,13 +41,3 @@ class UserLogin(APIView):
         token = maketoken(email,password,userobj)
         return Response({"token":token},
             status = status.HTTP_200_OK)
-
-def checktoken(token):
-    """
-    return user or None
-    """
-    try:
-        user = Token.objects.get(token=token).user
-    except User.DoesNotExist:
-        return None
-    return user
