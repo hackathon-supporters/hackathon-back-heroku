@@ -31,26 +31,27 @@ class ProfileChange(APIView):
     
     def post(self,request,format=None):
 
-        if checktoken(token=request.META.get('HTTP_AUTHORIZATION')) == None:
+        user = checktoken(token=request.META.get('HTTP_AUTHORIZATION'))
+        if user == None:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
         print(request.data)
-        id = request.data.get('id')
+        #id = request.data.get('id')
         username = request.data.get('username')
         faceurl = request.data.get('faceurl')
         society_or_student = request.data.get('society_or_student')
 
         if username == None or\
             faceurl == None or\
-                society_or_student == None or\
-                    id == None:
-            print(id)
+                society_or_student == None:
+                    #id == None
+            print(username)
             print(faceurl)
             print(society_or_student)
-            print(id)
+            #print(id)
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
-        profile = Humanprofile.objects.get(id = id)
+        profile = Humanprofile.objects.get(user = user)
         profile.username = username
         profile.faceurl = faceurl
         profile.society_or_student = society_or_student
