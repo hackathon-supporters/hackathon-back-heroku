@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'matchquiter.apps.MatchquiterConfig',
     'humanprofile.apps.HumanprofileConfig',
     'chat.apps.ChatConfig',
+    'company.apps.CompanyConfig',
 ]
 AUTH_USER_MODEL = 'users.User'
 

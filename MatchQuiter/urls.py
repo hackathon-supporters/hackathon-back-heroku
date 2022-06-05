@@ -24,6 +24,6 @@ urlpatterns = [
     path('',include('matchquiter.urls')),
     path('api/v1/auth/',include('users.urls')),
     path('api/v1/profile/',include('humanprofile.urls')),
-    #path('api/v1/resources/',include('resources.urls')),
     path('api/v1/chat/',include('chat.urls')),
+    path('api/v1/resources/companies/',include('company.urls')),
 ]
