@@ -1,9 +1,10 @@
+from urllib.parse import unquote
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status,permissions
 from humanprofile.models import Humanhistory, Humanprofile
 from users.models import User
-from django.db import transaction
+from django.db import transaction,connection
 
 from .models import Company
 from users.backends import checktoken
@@ -44,6 +45,39 @@ class getCompanyQuiter(APIView):
         }
 
         return Response(context,status.HTTP_200_OK)
+
+class getCompanies(APIView):
+    def get(self,request,format=None):
+        user = checktoken(request.META.get('HTTP_AUTHORIZATION'))
+        if user == None:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        
+        #英語だけかぁ
+        keyword = request.GET.get('q')
+        if keyword == None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        com = f'''
+        select * from company_company 
+        where companyname like'%{keyword}%';
+        '''
+        print(com)
+        cursor = connection.cursor()
+        cursor.execute(com)
+        rows = cursor.fetchall()
+        companies = list()
+        for row in rows:
+            companies.append({
+                "id":row[0],
+                "companyname":row[1],
+                "logourl":row[2],
+            })
+        
+        context = {
+            "companies":companies
+        }
+
+        return Response(context,status.HTTP_200_OK)
+
 
 def getQuiter(company:Company):
     quithumans = set()
