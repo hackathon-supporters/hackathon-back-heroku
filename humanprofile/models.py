@@ -20,7 +20,7 @@ class Humanprofile(models.Model):
 class Humanhistory(models.Model):
     id = models.UUIDField(primary_key=True,verbose_name='id',default=uuid_lib.uuid4,editable=False,unique=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,verbose_name="user",on_delete=models.CASCADE)
-    company_name = models.ForeignKey(Company,
+    company = models.ForeignKey(Company,
                                         verbose_name='company',
                                         on_delete=models.CASCADE)
     start_year = models.PositiveSmallIntegerField(verbose_name='start_year')
