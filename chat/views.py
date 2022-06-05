@@ -59,8 +59,8 @@ class ChatRooms(APIView):
         userid = str(user.id).replace("-","")
         com = f'''
         select chat_chatroomstate.room_id,
-        student.username as student,
-        society.username as society
+        student.user_id as student,
+        society.user_id as society
         from chat_chatroomstate
         join humanprofile_humanprofile as student 
         on student.user_id = chat_chatroomstate.student_user_id 
@@ -74,12 +74,12 @@ class ChatRooms(APIView):
         roomlist = list()
         for row in rows:
             room_id = row[0]
-            student_name = row[1]
-            society_name = row[2]
+            student_id = row[1]
+            society_id = row[2]
             roomlist.append({
                 "room_id":room_id,
-                "student_name":student_name,
-                "society_name":society_name
+                "student_id":student_id,
+                "society_id":society_id
             })
         
         context = {
@@ -91,7 +91,10 @@ class ChatRooms(APIView):
 class ChatRoom(APIView):
 
     def get(self,request,format=None):
-        pass
+        user = checktoken(token=request.META.get('HTTP_AUTHORIZATION'))
+        if user == None:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        
 
     def post(self,request,format=None):
         pass

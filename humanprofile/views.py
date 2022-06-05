@@ -61,3 +61,26 @@ class ProfileChange(APIView):
         user.save()
 
         return Response({"message":"success"},status=status.HTTP_201_CREATED)
+
+class getProfilebyId(APIView):
+    def get(self,request,format=None):
+        user = checktoken(token=request.META.get('HTTP_AUTHORIZATION'))
+        if user == None:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        
+        take_user_id = request.data.get('user_id')
+        if take_user_id == None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        take_user = User.objects.get(id = take_user_id)
+        take_user_pro = Humanprofile.objects.get(user=take_user)
+
+        context = {
+            "id":take_user.id,
+            "name":take_user_pro.username,
+            "avatar":take_user_pro.faceurl,
+            "society_or_student":take_user_pro.society_or_student,
+            "histories":"",
+        }
+
+        return Response(context,status=status.HTTP_200_OK)
