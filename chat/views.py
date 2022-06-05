@@ -60,7 +60,8 @@ class ChatRooms(APIView):
         com = f'''
         select chat_chatroomstate.room_id,
         student.user_id as student,
-        society.user_id as society
+        society.user_id as society,
+        chat_chatroomstate.state
         from chat_chatroomstate
         join humanprofile_humanprofile as student 
         on student.user_id = chat_chatroomstate.student_user_id 
@@ -76,10 +77,12 @@ class ChatRooms(APIView):
             room_id = row[0]
             student_id = row[1]
             society_id = row[2]
+            state = row[3]
             roomlist.append({
                 "room_id":room_id,
                 "student_id":student_id,
-                "society_id":society_id
+                "society_id":society_id,
+                "state":state,
             })
         
         context = {
@@ -89,7 +92,7 @@ class ChatRooms(APIView):
         return Response(context,status=status.HTTP_200_OK)
 
 class ChatRoom(APIView):
-    
+
     def get(self,request,format=None):
         user = checktoken(token=request.META.get('HTTP_AUTHORIZATION'))
         if user == None:
@@ -101,7 +104,7 @@ class ChatRoom(APIView):
         
         try:
             room = ChatroomState.objects.get(room_id = room_id)
-            if room.state == False:
+            if room.state != 2:
                 return Response({"message":"this room is not open"},status=status.HTTP_400_BAD_REQUEST)
             chatobjs = Chatlog.objects.filter(room = room).order_by('created_at').values()
         except Exception as e:

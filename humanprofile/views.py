@@ -7,6 +7,7 @@ from django.db import transaction
 from .models import Humanprofile
 from users.backends import checktoken
 from .serializer import HumanprofileSerializer
+from company.views import getprofile
 # Create your views here.
 
 class ProfileChange(APIView):
@@ -73,8 +74,11 @@ class getProfilebyId(APIView):
         if take_user_id == None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
+        
+
         take_user = User.objects.get(id = take_user_id)
-        take_user_pro = Humanprofile.objects.get(user=take_user)
+        context = getprofile(take_user)
+        """ take_user_pro = Humanprofile.objects.get(user=take_user)
 
         context = {
             "id":take_user.id,
@@ -82,6 +86,6 @@ class getProfilebyId(APIView):
             "avatar":take_user_pro.faceurl,
             "society_or_student":take_user_pro.society_or_student,
             "histories":"",
-        }
+        } """
 
         return Response(context,status=status.HTTP_200_OK)
