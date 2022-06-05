@@ -68,7 +68,7 @@ class getProfilebyId(APIView):
         if user == None:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         
-        take_user_id = request.data.get('user_id')
+        take_user_id = request.GET.get('user_id')
         if take_user_id == None:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         

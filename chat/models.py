@@ -23,5 +23,5 @@ class Chatlog(models.Model):
                                     on_delete=models.CASCADE,
                                     verbose_name="room_id")
     text = models.TextField(verbose_name='chattext')
-    student_or_society = models.BooleanField(help_text='社会人か就活生か',default=False)
+    society_or_student = models.BooleanField(help_text='社会人か就活生か',default=False)
     created_at = models.DateTimeField("投稿日",auto_now_add=True)

@@ -89,12 +89,65 @@ class ChatRooms(APIView):
         return Response(context,status=status.HTTP_200_OK)
 
 class ChatRoom(APIView):
-
+    
     def get(self,request,format=None):
         user = checktoken(token=request.META.get('HTTP_AUTHORIZATION'))
         if user == None:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
+        room_id = request.GET.get("roomid")
+        #print(room_id)
+        if room_id == None:
+            return Response({"message":"room_id is not"},status=status.HTTP_400_BAD_REQUEST)
         
+        try:
+            room = ChatroomState.objects.get(room_id = room_id)
+            if room.state == False:
+                return Response({"message":"this room is not open"},status=status.HTTP_400_BAD_REQUEST)
+            chatobjs = Chatlog.objects.filter(room = room).order_by('created_at').values()
+        except Exception as e:
+            print(e)
+
+        context = {
+            "room_id":room_id,
+            "chat":chatobjs,
+        }
+
+        return Response(context,status=status.HTTP_200_OK)
 
     def post(self,request,format=None):
-        pass
+        """
+        chatを送る
+        room_idで特定
+        user_idで社会人かどうか
+        testももらう
+        """
+        user = checktoken(token=request.META.get('HTTP_AUTHORIZATION'))
+        if user == None:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        print(user)
+        print(request.data)
+        room_id = request.data.get('roomid')
+        text = request.data.get('text')
+
+        if room_id == None or \
+            text == None:
+            return Response({"message":"情報足りない pls send roomid and text"},status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            room = ChatroomState.objects.get(room_id = room_id)
+            if room.state == False:
+                return Response({"message":"this room is not open"},status=status.HTTP_400_BAD_REQUEST)
+            userid = str(user.id).replace("-","")
+            com = f'''
+            select humanprofile_humanprofile.society_or_student from humanprofile_humanprofile 
+            where humanprofile_humanprofile.user_id = '{userid}'
+            '''
+            cursor = connection.cursor()
+            cursor.execute(com)
+            onoff = True if cursor.fetchall()[0][0] == 1 else False
+
+        except Exception as e:
+            print(e)
+        
+        Chatlog.objects.create(room = room,text = text,society_or_student = onoff)
+        return Response({"text":text},status.HTTP_201_CREATED)
