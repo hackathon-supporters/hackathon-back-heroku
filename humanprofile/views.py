@@ -18,7 +18,7 @@ class ProfileChange(APIView):
         print(token)
         user = checktoken(token=token)
         if user == None:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
         humanprofile = Humanprofile.objects.get_or_create(user=user)[0]
         #print(str(humanprofile))
         context = {
@@ -32,7 +32,7 @@ class ProfileChange(APIView):
     def post(self,request,format=None):
 
         if checktoken(token=request.META.get('HTTP_AUTHORIZATION')) == None:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
 
         print(request.data)
         id = request.data.get('id')
@@ -60,4 +60,4 @@ class ProfileChange(APIView):
         user.username = username
         user.save()
 
-        return Response({"message":"success"},status=status.HTTP_200_OK)
+        return Response({"message":"success"},status=status.HTTP_201_CREATED)
